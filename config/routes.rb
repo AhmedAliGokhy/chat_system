@@ -4,7 +4,11 @@ Rails.application.routes.draw do
   namespace :api do
     resources :applications, param: :token do
       resources :chats, param: :number do
-        resources :messages
+        resources :messages do
+          collection do
+            get 'search'
+          end
+        end
       end
     end
   end
