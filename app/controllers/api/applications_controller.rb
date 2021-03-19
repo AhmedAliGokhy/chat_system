@@ -4,7 +4,10 @@ module Api
       application = Application.new(application_params)
 
       if application.save
-        render json: application, status: :ok
+        redis = Redis.new
+        redis.set(application.token, 0)
+        
+        render json: { token: application.token }, status: :ok
       else
         render json: application.errors, status: :unprocessable_entity
       end
