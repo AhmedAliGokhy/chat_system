@@ -4,8 +4,7 @@ module Api
       application = Application.new(application_params)
 
       if application.save
-        redis = Redis.new
-        redis.set(application.token, 0)
+        REDIS_CLIENT.set(application.token, 0)
         
         render json: { token: application.token }, status: :ok
       else
