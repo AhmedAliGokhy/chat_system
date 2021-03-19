@@ -11,5 +11,10 @@ module Api
 
       render json: { message_number: messages_count }, status: :ok
     end
+
+    def search
+      results = Message.where(application_token: params[:application_token], chat_number: params[:chat_number]).search(params[:query]).records.records
+      render json: results, status: :ok
+    end
   end
 end
