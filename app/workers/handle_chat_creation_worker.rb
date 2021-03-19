@@ -9,7 +9,6 @@ class HandleChatCreationWorker
     application.chats.create(number: chats_count)
 
     # Insert new key in redis to store messages_count
-    redis = Redis.new
-    redis.set("#{application.token}_#{chats_count}", 0)
+    REDIS_CLIENT.set("#{application.token}_#{chats_count}", 0)
   end
 end
