@@ -1,5 +1,18 @@
 module Api
   class MessagesController < ApplicationController
+    before_action :set_application, only: %i[index show update]
+    before_action :set_chat, only: %i[index show update]
+
+    def index
+      messages = @chat.messages
+      render json: messages.as_json(only: [:number, :body]), status: :ok
+    end
+
+    def show
+      message = @chat.messages.find_by number: params[:number]
+      render json: message.as_json(only: [:number, :body]), status: :ok
+    end
+
     def create
       redis_key = "#{params[:application_token]}_#{params[:chat_number]}"
 
@@ -12,9 +25,30 @@ module Api
       render json: { message_number: messages_count }, status: :ok
     end
 
+    def update
+      message = @chat.messages.find_by number: params[:number]
+      message.update(message_params)
+
+      render json: message.as_json(only: [:number, :body]), status: :ok
+    end
+
     def search
-      results = Message.where(application_token: params[:application_token], chat_number: params[:chat_number]).search(params[:query]).records.records
+      results = Message.search(params[:query]).records.records
       render json: results, status: :ok
+    end
+
+    private
+
+    def set_application
+      @application = Application.find_by token: params[:application_token]
+    end
+
+    def set_chat
+      @chat = @application.chats.find_by(number: params[:chat_number])
+    end
+
+    def message_params
+      params.require(:message).permit(:body)
     end
   end
 end
