@@ -24,3 +24,6 @@
 
 # Ignore schema file
 db/schema.rb
+
+# Ignore dotenv
+.env
