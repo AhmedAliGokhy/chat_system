@@ -1,0 +1,57 @@
+version: '3.4'
+
+services:
+  database:
+    image: mysql:5.7
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_USERNAME: root
+      MYSQL_PASSWORD: root
+
+  elasticsearch:
+    image: elasticsearch:7.11.2
+    restart: always
+    environment:
+      - discovery.type=single-node
+    volumes:
+      - 'elasticsearch:/usr/share/elasticsearch/data'
+
+  redis:
+    image: redis:5.0.7
+
+  app:
+    build: .
+    restart: always
+    depends_on:
+      - 'database'
+      - 'elasticsearch'
+      - 'redis'
+    ports:
+      - '3000:3000'
+    volumes:
+      - '.:/app'
+      - 'gem_cache:/usr/local/bundle/gems'
+    env_file: .env
+    environment:
+      RAILS_ENV: development
+
+  sidekiq:
+    build: .
+    restart: always
+    depends_on:
+      - 'app'
+      - 'database'
+      - 'elasticsearch'
+      - 'redis'
+    volumes:
+      - '.:/app'
+      - 'gem_cache:/usr/local/bundle/gems'
+    env_file: .env
+    environment:
+      RAILS_ENV: development
+    entrypoint: ./entrypoints/sidekiq-entrypoint.sh
+
+volumes:
+  gem_cache:
+  elasticsearch:
