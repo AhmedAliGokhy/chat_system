@@ -25,4 +25,26 @@ class Message < ApplicationRecord
       indexes :body, type: :text, analyzer: "index_ngram_analyzer", search_analyzer: "search_ngram_analyzer"
     end
   end
+
+  def self.search_body(chat_id, body)
+    self.search({
+      "query": {
+            "bool": {
+                "must": [
+                    {
+                        "wildcard": {
+                            "body": {
+                                "value": "*#{body}*"
+                            }
+                        }
+                    },
+                    {
+                        "match": {"chat_id": chat_id}
+                    }
+                ]
+            }
+            
+        }
+    }).records.records
+  end
 end

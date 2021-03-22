@@ -1,7 +1,7 @@
 module Api
   class MessagesController < ApplicationController
-    before_action :set_application, only: %i[index show update]
-    before_action :set_chat, only: %i[index show update]
+    before_action :set_application, only: %i[index show update search]
+    before_action :set_chat, only: %i[index show update search]
 
     def index
       messages = @chat.messages
@@ -33,8 +33,8 @@ module Api
     end
 
     def search
-      results = Message.search(params[:query]).records.records
-      render json: results, status: :ok
+      results = Message.search_body(@chat.id.to_i, params[:body])
+      render json: results.as_json(only: [:number, :body]), status: :ok
     end
 
     private
