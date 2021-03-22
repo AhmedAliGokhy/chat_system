@@ -1,24 +1,40 @@
-# README
+# Application Based Chat System
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+## Features
 
-Things you may want to cover:
+- Create different chatting applications.
+- For each app, you can instantiate different chats.
+- For a given chat in an application, you can send messages.
+- Partial search through the application chat messages.
 
-* Ruby version
+## Tech
 
-* System dependencies
+- **Ruby on Rails** for the server-side application.
+- **Redis** used as a database cache (in-memory store).
+- **Sidekiq** for job scheduling.
+- **MySQL** as the database server.
+- **Elasticsearch** as a search engine.
+- **Docker** set of platforms as a service (container engine).
 
-* Configuration
+## Installation
 
-* Database creation
+- Install [docker](https://docs.docker.com/engine/install/).
+- Download project src.
 
-* Database initialization
+## Docker
 
-* How to run the test suite
+Using CLI:
 
-* Services (job queues, cache servers, search engines, etc.)
+`$ cd {PROJECT_DIR_PATH}`
 
-* Deployment instructions
+`$ docker-compose up`
 
-* ...
+> **_NOTE:_** Wait till all the containers are up and running. You should see something like the following:
+> ...
+> MySQL is up and running!
+> ElasticSearch is up and running!
+> ...
+
+## APIs
+
+[Postman Collection](https://drive.google.com/file/d/1taNKHYXuhhffqbf5OftaWNOuc92epc4t/view?usp=sharing)
