@@ -8,6 +8,8 @@ services:
       MYSQL_ROOT_PASSWORD: root
       MYSQL_USERNAME: root
       MYSQL_PASSWORD: root
+    volumes:
+      - 'database:/var/lib/mysql'
 
   elasticsearch:
     image: elasticsearch:7.11.2
@@ -32,8 +34,15 @@ services:
     volumes:
       - '.:/app'
       - 'gem_cache:/usr/local/bundle/gems'
-    env_file: .env
     environment:
+      DATABASE_NAME_DEV: chat_system_development
+      DATABASE_NAME_TEST: chat_system_test
+      DATABASE_HOST: database
+      DATABASE_USER: root
+      DATABASE_PASSWORD: root
+      DATABASE_SOCKET:
+      REDIS_HOST: redis
+      ELASTICSEARCH_URL: elasticsearch
       RAILS_ENV: development
 
   sidekiq:
@@ -47,11 +56,19 @@ services:
     volumes:
       - '.:/app'
       - 'gem_cache:/usr/local/bundle/gems'
-    env_file: .env
     environment:
+      DATABASE_NAME_DEV: chat_system_development
+      DATABASE_NAME_TEST: chat_system_test
+      DATABASE_HOST: database
+      DATABASE_USER: root
+      DATABASE_PASSWORD: root
+      DATABASE_SOCKET:
+      REDIS_HOST: redis
+      ELASTICSEARCH_URL: elasticsearch
       RAILS_ENV: development
     entrypoint: ./entrypoints/sidekiq-entrypoint.sh
 
 volumes:
   gem_cache:
   elasticsearch:
+  database:

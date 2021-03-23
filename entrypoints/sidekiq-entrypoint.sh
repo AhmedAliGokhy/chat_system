@@ -16,8 +16,4 @@ until nc -z -v -w30 $ELASTICSEARCH_URL 9200; do
 done
 echo "ElasticSearch is up and running!"
 
-if [ -f tmp/pids/server.pid ]; then
-  rm tmp/pids/server.pid
-fi
-
 bundle exec sidekiq
