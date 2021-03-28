@@ -1,15 +1,12 @@
 FROM ruby:2.5.3
 
-WORKDIR /app
-
-COPY Gemfile Gemfile.lock ./
-
 RUN apt-get update && apt-get install -y netcat
 
-RUN bundle config build.nokogiri --use-system-libraries
-
+# Copy the application code
+COPY . /app
+# Change to the application's dir
+WORKDIR /app
+# Install gems
 RUN bundle check || bundle install
-
-COPY . ./
 
 ENTRYPOINT ["./entrypoints/docker-entrypoint.sh"]
