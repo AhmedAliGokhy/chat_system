@@ -3,7 +3,8 @@ class HandleMessageCreationWorker
 
   def perform(application_token, chat_number, messages_count, body)
     application = Application.find_by(token: application_token)
-    chat = application.chats.where(number: chat_number).first_or_create
+    chat = application.chats.find_by(number: chat_number)
+    raise "Chat number not found (Maybe not inserted yet)" unless chat
     chat.update(messages_count: messages_count) if chat.messages_count < messages_count
 
     # Insert message record
