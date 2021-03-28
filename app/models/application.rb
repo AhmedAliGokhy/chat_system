@@ -12,9 +12,6 @@ class Application < ApplicationRecord
   private
 
   def set_token
-    loop do
-      self.token = SecureRandom.uuid
-      break unless Application.where(token: self.token).exists?
-    end
+    self.token = SecureRandom.uuid
   end
 end
