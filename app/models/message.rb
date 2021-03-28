@@ -1,5 +1,10 @@
 class Message < ApplicationRecord
+  # Associations
   belongs_to :chat
+
+  # Validations
+  validates :number, presence: true
+  validates :number, uniqueness: { scope: :chat }
 
   include Elasticsearch::Model
   include Elasticsearch::Model::Callbacks
